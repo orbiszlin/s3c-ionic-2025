@@ -1,0 +1,7 @@
+{
+  "name": "showcase-s3c",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
