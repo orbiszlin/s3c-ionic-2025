@@ -11,6 +11,14 @@ import {
 } from '@ionic/angular/standalone';
 import {ExploreContainerComponent} from '../explore-container/explore-container.component';
 
+export interface Location {
+  place: string;
+  weather: string;
+  temperature: number;
+  units: 'celsius' | 'fahrenheit';
+  icon: string;
+}
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -19,7 +27,15 @@ import {ExploreContainerComponent} from '../explore-container/explore-container.
 })
 export class Tab1Page {
 
-  public locations: string[] = ["Praha", "Paříž", "Zlín"];
+  public locations: Location[] = [
+    {
+      place: 'New York',
+      weather: 'Cloudy',
+      temperature: 25,
+      units: 'celsius',
+      icon: '10d@4x.png'
+    }
+  ];
 
   constructor() {
   }
