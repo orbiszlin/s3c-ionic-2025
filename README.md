@@ -27,7 +27,7 @@ To install, you need to have these components installed on your system:
 2. Install NPM libraries `npm install`.
 3. ~~Set up the project:~~
 
-- ~~Set environmentfor development [.ts](src/environments/environment.ts).~~
+- ~~Set environmentfor development [environment.ts](src/environments/environment.ts).~~
 
 4. Start server `ionic serve`.
 
