@@ -19,17 +19,17 @@
         <ion-row class="ion-align-items-center">
           <ion-col class="ion-no-padding">
             <ion-card-header>
-              <ion-card-title>{{ location.place }}</ion-card-title>
-              <ion-card-subtitle>{{ location.weather }}</ion-card-subtitle>
+              <ion-card-title>{{ location.name }}</ion-card-title>
+              <ion-card-subtitle>{{ location.weather[0].description }}</ion-card-subtitle>
             </ion-card-header>
 
             <ion-card-content>
-              <h2>{{location.temperature}} ℃</h2>
+              <h2>{{location.main.temp}} ℃/F</h2>
             </ion-card-content>
           </ion-col>
 
           <ion-col class="ion-no-padding ion-text-right">
-            <img src="https://openweathermap.org/img/wn/{{location.icon}}" alt="Weather Icon">
+            <img src="https://openweathermap.org/img/wn/{{location.weather[0].icon}}@4x.png" alt="Weather Icon">
           </ion-col>
         </ion-row>
       </ion-card>
