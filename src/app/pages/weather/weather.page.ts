@@ -8,7 +8,7 @@ import {
   IonItem,
   IonBadge,
   IonLabel, IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonRow, IonCol, IonModal,
-  IonButtons, IonInput, IonIcon, IonSelect, IonSelectOption
+  IonButtons, IonInput, IonIcon, IonSelect, IonSelectOption, IonSpinner
 } from '@ionic/angular/standalone';
 import {ExploreContainerComponent} from '../../explore-container/explore-container.component';
 import {WeatherService} from "../../utils/services/weather/weather.service";
@@ -21,7 +21,7 @@ import {ellipsisHorizontal, ellipsisVertical} from "ionicons/icons";
   selector: 'app-tab1',
   templateUrl: 'weather.page.html',
   styleUrls: ['weather.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, ExploreContainerComponent, IonList, IonItem, IonBadge, IonLabel, IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonRow, IonCol, IonModal, IonButtons, IonInput, FormsModule, IonIcon, IonSelect, IonSelectOption, ReactiveFormsModule],
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, ExploreContainerComponent, IonList, IonItem, IonBadge, IonLabel, IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonRow, IonCol, IonModal, IonButtons, IonInput, FormsModule, IonIcon, IonSelect, IonSelectOption, ReactiveFormsModule, IonSpinner],
 })
 export class WeatherPage {
 
@@ -34,6 +34,7 @@ export class WeatherPage {
   })
 
   protected units: string = 'metric';
+  protected loading: boolean = false;
 
   constructor() {
     addIcons({
@@ -41,10 +42,11 @@ export class WeatherPage {
       ellipsisHorizontal
     })
 
+    this.loading = true;
     this.weatherService.getWeather$(40.7128, -74.0060)
       .subscribe(data => {
         this.locations.push(data);
-        // console.log(data);
+        this.loading = false;
       });
   }
 
@@ -68,9 +70,11 @@ export class WeatherPage {
     this.weatherService.units = this.units as any;
 
     // get new places
+    this.loading = true;
     this.weatherService.getWeather$(40.7128, -74.0060)
       .subscribe(data => {
         this.locations.push(data);
+        this.loading = false;
       });
   }
 
