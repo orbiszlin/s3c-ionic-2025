@@ -10,7 +10,9 @@ export class WeatherService {
 
   private http = inject(HttpClient);
 
+  public units: 'metric' | 'imperial' = 'metric';
+
   getWeather$(lat: number, lon: number) {
-    return this.http.get<Location>(environment.baseUrl + `/weather?lat=${lat}&lon=${lon}&appid=${environment.apiKey}&units=metric`);
+    return this.http.get<Location>(environment.baseUrl + `/weather?lat=${lat}&lon=${lon}&appid=${environment.apiKey}&units=${this.units}`);
   }
 }

@@ -33,6 +33,8 @@ export class WeatherPage {
     units: new FormControl('metric', [Validators.required]),
   })
 
+  protected units: string = 'metric';
+
   constructor() {
     addIcons({
       ellipsisVertical,
@@ -57,6 +59,19 @@ export class WeatherPage {
 
   confirm() {
     this.modal.dismiss(this.name, 'confirm');
+
+    // this.units = this.form.get('units')!.value;
+    this.units = this.form.value.units!;
+
+    // reset places
+    this.locations = [];
+    this.weatherService.units = this.units as any;
+
+    // get new places
+    this.weatherService.getWeather$(40.7128, -74.0060)
+      .subscribe(data => {
+        this.locations.push(data);
+      });
   }
 
   onWillDismiss(event: CustomEvent<any>) {

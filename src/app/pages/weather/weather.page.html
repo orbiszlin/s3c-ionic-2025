@@ -30,7 +30,14 @@
             </ion-card-header>
 
             <ion-card-content>
-              <h2>{{ location.main.temp }} ℃/F</h2>
+              <h2>
+                {{ location.main.temp }}
+                @if (units === 'metric') {
+                  ℃
+                } @else {
+                  F
+                }
+              </h2>
             </ion-card-content>
           </ion-col>
 
@@ -43,7 +50,7 @@
 
   </div>
 
-  <p>{{ message }}</p>
+  <p>Jednotky: {{ units }}</p>
   <ion-modal trigger="open-settings-modal" (willDismiss)="onWillDismiss($event)">
     <ng-template>
       <ion-header>
