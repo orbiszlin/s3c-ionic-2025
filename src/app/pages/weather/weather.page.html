@@ -3,6 +3,12 @@
     <ion-title>
       Weather
     </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button id="open-settings-modal">
+        <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -24,7 +30,7 @@
             </ion-card-header>
 
             <ion-card-content>
-              <h2>{{location.main.temp}} ℃/F</h2>
+              <h2>{{ location.main.temp }} ℃/F</h2>
             </ion-card-content>
           </ion-col>
 
@@ -37,9 +43,8 @@
 
   </div>
 
-  <ion-button id="open-modal" expand="block">Open</ion-button>
   <p>{{ message }}</p>
-  <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+  <ion-modal trigger="open-settings-modal" (willDismiss)="onWillDismiss($event)">
     <ng-template>
       <ion-header>
         <ion-toolbar>
@@ -53,15 +58,14 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-        <ion-item>
-          <ion-input
-            label="Enter your name"
-            labelPlacement="stacked"
-            type="text"
-            placeholder="Your name"
-            [(ngModel)]="name"
-          ></ion-input>
-        </ion-item>
+        <ion-list [formGroup]="form">
+          <ion-item>
+            <ion-select formControlName="units">
+              <ion-select-option value="metric">Metric</ion-select-option>
+              <ion-select-option value="imperial">Imperial</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
       </ion-content>
     </ng-template>
   </ion-modal>
