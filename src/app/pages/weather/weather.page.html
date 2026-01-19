@@ -77,6 +77,15 @@
             </ion-select>
           </ion-item>
         </ion-list>
+
+        <ion-list [formGroup]="locationAddForm">
+          <ion-list-header>Locations</ion-list-header>
+          <ion-item>
+            <ion-input formControlName="latitude" placeholder="Latitude"></ion-input>
+            <ion-input formControlName="longitude" placeholder="Longitude"></ion-input>
+            <ion-button slot="end" (click)="saveLocation()">Add</ion-button>
+          </ion-item>
+        </ion-list>
       </ion-content>
     </ng-template>
   </ion-modal>

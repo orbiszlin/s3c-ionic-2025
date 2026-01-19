@@ -8,7 +8,7 @@ import {
   IonItem,
   IonBadge,
   IonLabel, IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonRow, IonCol, IonModal,
-  IonButtons, IonInput, IonIcon, IonSelect, IonSelectOption, IonSpinner
+  IonButtons, IonInput, IonIcon, IonSelect, IonSelectOption, IonSpinner, IonListHeader
 } from '@ionic/angular/standalone';
 import {ExploreContainerComponent} from '../../explore-container/explore-container.component';
 import {WeatherService} from "../../utils/services/weather/weather.service";
@@ -16,22 +16,40 @@ import {Location} from "../../models/location.model";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {addIcons} from "ionicons";
 import {ellipsisHorizontal, ellipsisVertical} from "ionicons/icons";
+import {StorageService} from "../../utils/services/storage/storage.service";
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'weather.page.html',
   styleUrls: ['weather.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, ExploreContainerComponent, IonList, IonItem, IonBadge, IonLabel, IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonRow, IonCol, IonModal, IonButtons, IonInput, FormsModule, IonIcon, IonSelect, IonSelectOption, ReactiveFormsModule, IonSpinner],
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, ExploreContainerComponent, IonList, IonItem, IonBadge, IonLabel, IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonRow, IonCol, IonModal, IonButtons, IonInput, FormsModule, IonIcon, IonSelect, IonSelectOption, ReactiveFormsModule, IonSpinner, IonListHeader],
 })
 export class WeatherPage {
 
   private weatherService = inject(WeatherService)
+  private storageService = inject(StorageService)
+
+  private places: { latitude: number, longitude: number }[] = []
 
   public locations: Location[] = [];
 
   form = new FormGroup({
     units: new FormControl('metric', [Validators.required]),
   })
+
+  locationAddForm = new FormGroup({
+    latitude: new FormControl(null, [
+      Validators.required,
+      Validators.min(-90),
+      Validators.max(90)
+    ]),
+    longitude: new FormControl(null, [
+      Validators.required,
+      Validators.min(-180),
+      Validators.max(180)
+    ]),
+  })
+
 
   protected units: string = 'metric';
   protected loading: boolean = false;
@@ -82,5 +100,19 @@ export class WeatherPage {
     if (event.detail.role === 'confirm') {
       this.message = `Hello, ${event.detail.data}!`;
     }
+  }
+
+  saveLocation() {
+    if (this.locationAddForm.invalid) {
+      // TODO: předělat do toastu
+      alert('Invalid form');
+      return;
+    }
+
+    this.places.push(this.locationAddForm.value as any);
+
+    this.storageService.save('locations', this.places);
+
+    this.locationAddForm.reset();
   }
 }
