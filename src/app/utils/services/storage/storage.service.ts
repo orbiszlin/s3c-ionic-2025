@@ -13,7 +13,7 @@ export class StorageService {
     });
   }
 
-  async get(key: string) {
+  async get<T = any>(key: string): Promise<T | null> {
     const {value} = await Preferences.get({
       key: key
     });
