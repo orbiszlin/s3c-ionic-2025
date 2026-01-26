@@ -85,6 +85,16 @@
             <ion-input formControlName="longitude" placeholder="Longitude"></ion-input>
             <ion-button slot="end" (click)="saveLocation()">Add</ion-button>
           </ion-item>
+
+          @for (location of locationsSignal(); track $index) {
+            <ion-item>
+              <div>
+                <div><b>Latitude:</b> {{ location.latitude }}</div>
+                <div><b>Longitude:</b> {{ location.longitude }}</div>
+              </div>
+              <ion-button slot="end" (click)="removeLocation($index)">Del</ion-button>
+            </ion-item>
+          }
         </ion-list>
       </ion-content>
     </ng-template>

@@ -1,4 +1,4 @@
-import {Component, inject, ViewChild} from '@angular/core';
+import {Component, inject, OnInit, signal, ViewChild} from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -17,6 +17,7 @@ import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {addIcons} from "ionicons";
 import {ellipsisHorizontal, ellipsisVertical} from "ionicons/icons";
 import {StorageService} from "../../utils/services/storage/storage.service";
+import {Geolocation} from "../../models/geolocation.model";
 
 @Component({
   selector: 'app-tab1',
@@ -24,14 +25,15 @@ import {StorageService} from "../../utils/services/storage/storage.service";
   styleUrls: ['weather.page.scss'],
   imports: [IonHeader, IonToolbar, IonTitle, IonContent, ExploreContainerComponent, IonList, IonItem, IonBadge, IonLabel, IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonRow, IonCol, IonModal, IonButtons, IonInput, FormsModule, IonIcon, IonSelect, IonSelectOption, ReactiveFormsModule, IonSpinner, IonListHeader],
 })
-export class WeatherPage {
+export class WeatherPage implements OnInit {
 
   private weatherService = inject(WeatherService)
   private storageService = inject(StorageService)
 
-  private places: { latitude: number, longitude: number }[] = []
-
+  // TODO: nahradit signálem
   public locations: Location[] = [];
+
+  public locationsSignal = signal<Geolocation[]>([]);
 
   form = new FormGroup({
     units: new FormControl('metric', [Validators.required]),
@@ -68,6 +70,11 @@ export class WeatherPage {
       });
   }
 
+  async ngOnInit(): Promise<void> {
+    const locations = await this.storageService.get<Geolocation[] | null>('locations');
+    this.locationsSignal.set(locations ?? []);
+  }
+
   @ViewChild(IonModal) modal!: IonModal;
 
   message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
@@ -102,17 +109,27 @@ export class WeatherPage {
     }
   }
 
-  saveLocation() {
+  async saveLocation() {
     if (this.locationAddForm.invalid) {
       // TODO: předělat do toastu
       alert('Invalid form');
       return;
     }
 
-    this.places.push(this.locationAddForm.value as any);
+    const places = this.locationsSignal();
+    places.push(this.locationAddForm.value as any as Geolocation);
+    this.locationsSignal.set(places);
 
-    this.storageService.save('locations', this.places);
+    await this.storageService.save('locations', places);
 
     this.locationAddForm.reset();
+  }
+
+  protected async removeLocation(index: number) {
+    const places = this.locationsSignal();
+    places.splice(index, 1);
+    this.locationsSignal.set(places);
+
+    await this.storageService.save('locations', places);
   }
 }
