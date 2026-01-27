@@ -63,16 +63,19 @@ export class WeatherPage implements OnInit {
     })
 
     this.loading = true;
-    this.weatherService.getWeather$(40.7128, -74.0060)
-      .subscribe(data => {
-        this.locations.push(data);
-        this.loading = false;
-      });
   }
 
   async ngOnInit(): Promise<void> {
     const locations = await this.storageService.get<Geolocation[] | null>('locations');
     this.locationsSignal.set(locations ?? []);
+
+    locations?.forEach(location => {
+      this.weatherService.getWeather$(location.latitude, location.longitude)
+        .subscribe(data => {
+          this.locations.push(data);
+          this.loading = false;
+        });
+    })
   }
 
   @ViewChild(IonModal) modal!: IonModal;
