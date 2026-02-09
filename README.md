@@ -25,9 +25,14 @@ To install, you need to have these components installed on your system:
 
 1. Clone the repository `git clone` of this project, or use an IDE cloning tool.
 2. Install NPM libraries `npm install`.
-3. ~~Set up the project:~~
-
-- ~~Set environmentfor development [environment.ts](src/environments/environment.ts).~~
-
-4. Start server `ionic serve`.
+3. Set up the project:
+   - Set the environment for development [environment.ts](src/environments/environment.ts).
+   - Set the environment for production [environment.prod.ts](src/environments/environment.prod.ts).
+4. Set Firesbase project
+   - Create a Firebase project (if you don't have it) [Firebase](https://console.firebase.google.com/).
+   - Login to Firebase CLI `firebase login`.
+   - Set Firebase project name (ID) in [.firebaserc](.firebaserc)
+   - Build project `ionic build --prod`, or `ng build --prod`, or `npm run build`.
+   - Deploy Firebase project `firebase deploy`.
+5. Start server `ionic serve`.
 
